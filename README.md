@@ -91,9 +91,9 @@ ciclos_rep ──< certificados
 ## Equipo
 
 Proyecto CREA · Innovación y Emprendimiento I  
-**INACAP Valparaíso · Ingeniería en Telecomunicaciones, Conectividad y Redes · 2026**
+**INACAP Valparaíso · Área informatica · 2026**
 
-Amaro Tapia · Daniela Muñoz · Julio Anabalón · Vicente Rodríguez · Diego Baxter · Diego Maturana
+· Daniela Muñoz · 
 
 ---
 
