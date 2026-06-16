@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RetornaCírculo · Dashboard Embebible</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:      #060a0f;
+    --surface: #0b1219;
+    --s2:      #0e1822;
+    --s3:      #142131;
+    --bdr:     #1a2d40;
+    --bdr2:    #244260;
+    --cyan:    #00d4ff;
+    --pink:    #ff3c6e;
+    --green:   #39ff84;
+    --amber:   #ffb547;
+    --eco:     #5cd9a8;
+    --txt:     #c8dde8;
+    --bright:  #e8f4fa;
+    --muted:   #4a6070;
+    --muted2:  #6a8090;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--txt);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+    overflow: hidden;
+  }
+
+  /* ─── GRID LAYOUT ─── */
+  .rc-dash {
+    display: grid;
+    grid-template-rows: 38px 1fr;
+    grid-template-columns: 120px 1fr;
+    width: 100%; height: 100%;
+    min-width: 680px; min-height: 460px;
+  }
+
+  /* Topbar */
+  .rc-top {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(6,10,15,0.95);
+    border-bottom: 1px solid var(--bdr2);
+    padding: 0 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+  }
+  .rc-top .brand { color: var(--bright); letter-spacing: 0.08em; }
+  .rc-top .brand span { color: var(--eco); }
+  .rc-top .live { color: var(--green); display: flex; align-items: center; gap: 4px; }
+  .rc-top .live::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 6px var(--green);
+    animation: blink 1.5s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.2; } }
+  .rc-top .ts { color: var(--muted2); }
+
+  /* Sidebar */
+  .rc-side {
+    background: var(--surface);
+    border-right: 1px solid var(--bdr);
+    padding: 10px 0;
+    overflow: hidden;
+  }
+  .rc-side .grp {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    padding: 6px 10px 2px;
+    text-transform: uppercase;
+  }
+  .rc-side .nav-i {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 10px;
+    font-size: 0.68rem;
+    color: var(--muted2);
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .rc-side .nav-i:hover { color: var(--cyan); border-left-color: rgba(0,212,255,0.4); }
+  .rc-side .nav-i.active { color: var(--cyan); border-left-color: var(--cyan); background: rgba(0,212,255,0.04); font-weight: 700; }
+  .rc-side .ic { font-size: 0.7rem; width: 14px; text-align: center; }
+
+  /* Main content */
+  .rc-main {
+    background: var(--bg);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    padding: 10px;
+    gap: 8px;
+  }
+
+  /* KPI row */
+  .kpi-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    flex-shrink: 0;
+  }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--bdr);
+    padding: 8px 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::after {
+    content: '';
+    position: absolute; left: 0; bottom: 0; height: 2px; width: 50%;
+  }
+  .kpi.c::after  { background: var(--cyan); }
+  .kpi.g::after  { background: var(--green); }
+  .kpi.e::after  { background: var(--eco); }
+  .kpi.a::after  { background: var(--amber); }
+  .kpi .lbl {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    color: var(--muted2);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .kpi .val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-top: 2px;
+    line-height: 1;
+  }
+  .kpi.c .val { color: var(--cyan); text-shadow: 0 0 14px rgba(0,212,255,.5); }
+  .kpi.g .val { color: var(--green); text-shadow: 0 0 14px rgba(57,255,132,.5); }
+  .kpi.e .val { color: var(--eco); }
+  .kpi.a .val { color: var(--amber); }
+  .kpi .delta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    color: var(--muted2);
+    margin-top: 2px;
+  }
+
+  /* Middle row: 2 charts */
+  .mid-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    flex: 1; min-height: 0;
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--bdr);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .panel-hd {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--bdr);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.56rem;
+    color: var(--muted2);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .panel-hd .badge {
+    padding: 1px 6px;
+    border: 1px solid;
+    font-size: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+  .panel-hd .badge.g { color: var(--green); border-color: var(--green); }
+  .panel-hd .badge.a { color: var(--amber); border-color: var(--amber); }
+  .panel-hd .badge.p { color: var(--pink); border-color: var(--pink); }
+  .panel-body { flex: 1; padding: 8px; min-height: 0; }
+  .chart-wrap { position: relative; width: 100%; height: 100%; }
+
+  /* Bottom row */
+  .bot-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Table */
+  .rc-table { width: 100%; border-collapse: collapse; }
+  .rc-table th {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.48rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 3px 6px;
+    border-bottom: 1px solid var(--bdr2);
+  }
+  .rc-table td {
+    padding: 3px 6px;
+    font-size: 0.68rem;
+    color: var(--txt);
+    border-bottom: 1px dashed var(--bdr);
+  }
+  .rc-table td.ok   { color: var(--green); font-family: 'Share Tech Mono',monospace; font-size: 0.6rem; }
+  .rc-table td.warn { color: var(--amber); font-family: 'Share Tech Mono',monospace; font-size: 0.6rem; }
+  .rc-table td.err  { color: var(--pink);  font-family: 'Share Tech Mono',monospace; font-size: 0.6rem; }
+  .rc-table td b { color: var(--cyan); font-weight: 400; }
+
+  /* Event stream */
+  .ev-stream { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; overflow: hidden; }
+  .ev-row {
+    display: grid; grid-template-columns: 52px 1fr;
+    gap: 4px; padding: 2px 0;
+    border-bottom: 1px dashed var(--bdr);
+    color: var(--muted2);
+  }
+  .ev-row .t { color: var(--green); }
+  .ev-row .ok   { color: var(--green); }
+  .ev-row .warn { color: var(--amber); }
+  .ev-row .err  { color: var(--pink); }
+  .ev-row .mid  { color: var(--cyan); font-size: 0.52rem; }
+
+  /* Gauge */
+  .gauge-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .gauge {
+    --p: 38.2;
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: conic-gradient(var(--eco) calc(var(--p) * 1%), var(--s3) 0);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .gauge::before {
+    content: '';
+    position: absolute; inset: 7px;
+    background: var(--s2);
+    border-radius: 50%;
+    border: 1px solid var(--bdr);
+  }
+  .gauge .gtxt {
+    position: relative;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--eco);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+  }
+  .gauge .gtxt small {
+    display: block;
+    font-size: 0.38rem;
+    color: var(--muted2);
+    font-family: 'Share Tech Mono', monospace;
+    margin-top: 2px;
+    letter-spacing: 0.06em;
+  }
+  .gauge-stats { font-family: 'Share Tech Mono', monospace; font-size: 0.56rem; }
+  .gauge-stats .gs-row { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; border-bottom: 1px dashed var(--bdr); }
+  .gauge-stats .gs-row .k { color: var(--muted2); }
+  .gauge-stats .gs-row .v { color: var(--bright); }
+
+  /* EMBED WATERMARK */
+  .embed-mark {
+    position: absolute; bottom: 4px; right: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.44rem;
+    color: var(--muted);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  @media (max-width: 700px) {
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .mid-row, .bot-row { grid-template-columns: 1fr; }
+    .rc-side { display: none; }
+    .rc-dash { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="rc-dash">
+
+  <!-- TOPBAR -->
+  <div class="rc-top">
+    <span class="brand">♻ RETORNA<span>CÍRCULO</span> · RC-OPS-v0.4</span>
+    <span class="live">LIVE</span>
+    <span class="ts" id="ts-embed">2026-06-15 16:45:22 CLT</span>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="rc-side">
+    <div class="grp">Menú</div>
+    <div class="nav-i active"><span class="ic">▦</span> Dashboard</div>
+    <div class="nav-i"><span class="ic">⊞</span> Envases</div>
+    <div class="nav-i"><span class="ic">↻</span> Eventos</div>
+    <div class="nav-i"><span class="ic">⊕</span> Puntos</div>
+    <div class="grp">Análisis</div>
+    <div class="nav-i"><span class="ic">◈</span> Cumpl. REP</div>
+    <div class="nav-i"><span class="ic">▲</span> Materiales</div>
+    <div class="nav-i"><span class="ic">⬡</span> CO₂</div>
+    <div class="grp">Salidas</div>
+    <div class="nav-i"><span class="ic">▣</span> RETC</div>
+    <div class="nav-i"><span class="ic">◆</span> Certs.</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="rc-main">
+
+    <!-- KPIs -->
+    <div class="kpi-row">
+      <div class="kpi c">
+        <div class="lbl">Envases registrados</div>
+        <div class="val" data-count="248617">0</div>
+        <div class="delta">↑ 12,4% vs. mes anterior</div>
+      </div>
+      <div class="kpi g">
+        <div class="lbl">Tasa de retorno</div>
+        <div class="val" data-count="41.8" data-suffix="%">0</div>
+        <div class="delta">↑ meta 40% · +1,8pp</div>
+      </div>
+      <div class="kpi e">
+        <div class="lbl">Cumplimiento REP</div>
+        <div class="val" data-count="38.2" data-suffix="%">0</div>
+        <div class="delta">↑ sobre Fase 3 (35%)</div>
+      </div>
+      <div class="kpi a">
+        <div class="lbl">CO₂ evitado (t)</div>
+        <div class="val" data-count="186.4">0</div>
+        <div class="delta">≈ 42 autos/año</div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="mid-row">
+      <div class="panel">
+        <div class="panel-hd">
+          Retorno por material · 90 días
+          <span class="badge g">LBS · LIVE</span>
+        </div>
+        <div class="panel-body"><div class="chart-wrap"><canvas id="chMat-e"></canvas></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd">
+          Cumplimiento REP 2026
+          <span class="badge a">FASE 4</span>
+        </div>
+        <div class="panel-body"><div class="chart-wrap"><canvas id="chComp-e"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="bot-row">
+      <!-- Table -->
+      <div class="panel">
+        <div class="panel-hd">
+          Ranking empresas piloto
+          <span class="badge g">TOP 5</span>
+        </div>
+        <div class="panel-body" style="padding:4px 8px;">
+          <table class="rc-table">
+            <tr><th>Empresa</th><th>Envases</th><th>Retorno</th><th>Estado</th></tr>
+            <tr><td><b>Distrib. Andes</b></td><td>68.412</td><td class="ok">48,3%</td><td class="ok">● META</td></tr>
+            <tr><td><b>Envases Pacífico</b></td><td>54.201</td><td class="ok">42,1%</td><td class="ok">● META</td></tr>
+            <tr><td><b>Cervecera Vpo.</b></td><td>41.880</td><td class="ok">40,7%</td><td class="ok">● META</td></tr>
+            <tr><td><b>Importadora Costa</b></td><td>47.022</td><td class="warn">37,5%</td><td class="warn">● ATENC.</td></tr>
+            <tr><td><b>Retail Marga M.</b></td><td>37.102</td><td class="err">29,4%</td><td class="err">● BAJO</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Events + Gauge -->
+      <div class="panel">
+        <div class="panel-hd">
+          Stream de eventos · tiempo real
+          <span class="badge p">● REC</span>
+        </div>
+        <div class="panel-body" style="display:flex;flex-direction:column;gap:6px;">
+          <div class="ev-stream" id="evStream"></div>
+          <div class="gauge-wrap" style="margin-top:auto;padding-top:6px;border-top:1px solid var(--bdr);">
+            <div class="gauge" id="gauge-embed">
+              <div class="gtxt"><span id="gauge-val">38.2</span>%<small>CUMPL REP</small></div>
+            </div>
+            <div class="gauge-stats">
+              <div class="gs-row"><span class="k">Meta Fase 4</span><span class="v">40,0%</span></div>
+              <div class="gs-row"><span class="k">Fase actual</span><span class="v">38,2%</span></div>
+              <div class="gs-row"><span class="k">Envases ret.</span><span class="v">103.617</span></div>
+              <div class="gs-row"><span class="k">Región</span><span class="v">VAL-VAP</span></div>
+              <div class="gs-row"><span class="k">Empresas</span><span class="v">5 activas</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<div class="embed-mark">RETORNACÍRCULO · Demo CREA INACAP 2026</div>
+
+<script>
+// Timestamp
+function updateTS(){
+  const d=new Date(), pad=n=>String(n).padStart(2,'0');
+  document.getElementById('ts-embed').textContent=
+    `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} CLT`;
+}
+updateTS(); setInterval(updateTS,1000);
+
+// Sidebar tabs
+document.querySelectorAll('.rc-side .nav-i').forEach(n=>{
+  n.addEventListener('click',()=>{
+    document.querySelectorAll('.rc-side .nav-i').forEach(x=>x.classList.remove('active'));
+    n.classList.add('active');
+  });
+});
+
+// Number counter
+function animCount(el){
+  const t=parseFloat(el.dataset.count), suf=el.dataset.suffix||'', fl=t%1!==0;
+  const dur=1400, start=performance.now();
+  const step=ts=>{
+    const p=Math.min(1,(ts-start)/dur), v=t*(1-Math.pow(1-p,3));
+    el.textContent=(fl?v.toFixed(1):Math.floor(v).toLocaleString('es-CL'))+suf;
+    if(p<1)requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){animCount(x.target);obs.unobserve(x.target);}});},{threshold:0.4});
+document.querySelectorAll('[data-count]').forEach(el=>obs.observe(el));
+
+// Charts
+const chartFont="'Share Tech Mono',monospace", gridClr='rgba(36,66,96,0.35)', txtClr='#6a8090';
+Chart.defaults.font.family=chartFont; Chart.defaults.color=txtClr; Chart.defaults.borderColor=gridClr;
+const labels90=[], today=new Date();
+for(let i=89;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);labels90.push(`${d.getDate()}/${d.getMonth()+1}`);}
+const rand=(b,a)=>b+(Math.random()-.5)*a;
+const series=(b,a)=>labels90.map((_,i)=>+rand(b,a).toFixed(0)+(i/89)*(a/3));
+
+new Chart(document.getElementById('chMat-e'),{
+  type:'line',
+  data:{
+    labels:labels90,
+    datasets:[
+      {label:'PET',data:series(820,240),borderColor:'#00d4ff',backgroundColor:'rgba(0,212,255,.08)',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+      {label:'Vidrio',data:series(540,180),borderColor:'#5cd9a8',backgroundColor:'rgba(92,217,168,.06)',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+      {label:'Cartón',data:series(390,120),borderColor:'#39ff84',backgroundColor:'rgba(57,255,132,.06)',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+      {label:'Metal',data:series(210,100),borderColor:'#ffb547',backgroundColor:'rgba(255,181,71,.06)',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+      {label:'Plást.',data:series(140,90),borderColor:'#ff3c6e',backgroundColor:'rgba(255,60,110,.06)',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+    ]
+  },
+  options:{
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:8,font:{size:9}}},
+      tooltip:{backgroundColor:'#0b1219',borderColor:'#244260',borderWidth:1}
+    },
+    scales:{
+      x:{display:true,ticks:{maxTicksLimit:6,font:{size:8}},grid:{color:gridClr}},
+      y:{display:true,ticks:{font:{size:8}},grid:{color:gridClr}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chComp-e'),{
+  type:'bar',
+  data:{
+    labels:['PET','Vidrio','Metal','Cartón','Plást.','Total'],
+    datasets:[
+      {label:'Real 2026',data:[52.1,61.8,48.3,73.4,21.6,38.2],backgroundColor:['#00d4ff','#5cd9a8','#ffb547','#39ff84','#ff3c6e','#c8dde8'],borderWidth:1},
+      {label:'Meta F4',data:[45,60,55,70,30,35],backgroundColor:'rgba(36,66,96,.35)',borderColor:'#244260',borderWidth:1}
+    ]
+  },
+  options:{
+    maintainAspectRatio:false,indexAxis:'y',
+    plugins:{
+      legend:{position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:8,font:{size:9}}},
+      tooltip:{backgroundColor:'#0b1219',borderColor:'#244260',borderWidth:1,callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.x}%`}}
+    },
+    scales:{
+      x:{max:100,grid:{color:gridClr},ticks:{font:{size:8},callback:v=>v+'%'}},
+      y:{grid:{display:false},ticks:{font:{size:9}}}
+    }
+  }
+});
+
+// Event stream
+const evTpls=[
+  {mat:'PET',w:'1,2 kg',qr:'00084217',co:'Distrib. Andes',st:'ok'},
+  {mat:'Vidrio',w:'0,8 kg',qr:'00084218',co:'Cervecera Vpo.',st:'ok'},
+  {mat:'Cartón',w:'0,3 kg',qr:'00084219',co:'Envases Pacífico',st:'ok'},
+  {mat:'Metal',w:'0,4 kg',qr:'00084220',co:'Importadora Costa',st:'warn'},
+  {mat:'PET',w:'1,5 kg',qr:'00084221',co:'Retail Marga M.',st:'ok'},
+  {mat:'Plást.',w:'0,2 kg',qr:'00084222',co:'Distrib. Andes',st:'err'},
+];
+const evMsg={ok:'RETORNO_OK',warn:'CONTAMINADO',err:'RECHAZADO'};
+const evs=[]; for(let i=0;i<8;i++){const tp=evTpls[i%evTpls.length],d=new Date(Date.now()-i*47000);evs.push({t:`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`,tp});}
+function renderEvs(){
+  document.getElementById('evStream').innerHTML=evs.map(e=>`<div class="ev-row"><span class="t">${e.t}</span><span><span class="${e.tp.st}">${evMsg[e.tp.st]}</span> <span class="mid">${e.tp.mat}</span> ${e.tp.w} <span class="mid">·</span> ${e.tp.co}</span></div>`).join('');
+}
+renderEvs();
+setInterval(()=>{
+  evs.unshift(evs.pop());
+  const n=new Date();evs[0].t=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
+  renderEvs();
+},2800);
+
+// Gauge oscillation
+const gaugeEl=document.getElementById('gauge-embed'),gvEl=document.getElementById('gauge-val');
+let gv=38.2;
+setInterval(()=>{
+  gv+=(Math.random()-.5)*.4; gv=Math.max(36,Math.min(41,gv));
+  gaugeEl.style.setProperty('--p',gv.toFixed(1));
+  gvEl.textContent=gv.toFixed(1);
+},3500);
+</script>
+</body>
+</html>

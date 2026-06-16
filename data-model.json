@@ -1,0 +1,138 @@
+{
+  "$schema": "https://retornacirculo.cl/schemas/v1/api-contracts.json",
+  "version": "1.0.0",
+  "descripcion": "Contratos de datos RetornaCírculo · Ley REP B2B",
+
+  "envase": {
+    "descripcion": "Unidad física de envase trazada con QR",
+    "ejemplo": {
+      "id": 84217,
+      "qr_code": "QR-ENV-CL-00084217",
+      "empresa_id": 3,
+      "material": "PET",
+      "peso_kg": 1.2,
+      "capacidad_l": 1.5,
+      "estado": "RETORNADO",
+      "lote": "LOT-2026-Q2-0041",
+      "registrado_en": "2026-04-10T08:30:00-04:00",
+      "actualizado_en": "2026-06-14T16:45:22-04:00"
+    },
+    "estados_posibles": ["EN_CAMPO", "EN_TRANSITO", "RETORNADO", "VALORIZADO", "RECHAZADO"],
+    "materiales_validos": ["PET", "VIDRIO", "CARTON", "METAL", "PLASTICO_RIGIDO", "OTRO"]
+  },
+
+  "evento": {
+    "descripcion": "Registro inmutable de cada acción en el ciclo de vida del envase (event sourcing)",
+    "ejemplo": {
+      "id": 9921847,
+      "envase_id": 84217,
+      "qr_code": "QR-ENV-CL-00084217",
+      "punto_id": 12,
+      "tipo_evento": "RETORNO_OK",
+      "peso_real_kg": 1.19,
+      "operador": "RVM-VAL-004",
+      "lat": -33.0472,
+      "lng": -71.6127,
+      "metadata": {
+        "empresa": "Distrib. Andes del Sur",
+        "material_detectado": "PET",
+        "contaminacion_pct": 0,
+        "temperatura_C": 18.4,
+        "turno": "MANANA"
+      },
+      "ocurrido_en": "2026-06-14T16:45:22-04:00"
+    },
+    "tipos_evento": {
+      "REGISTRO": "Alta inicial del envase en plataforma",
+      "DESPACHO": "Salida hacia distribución",
+      "RECEPCION": "Recibido en punto de venta / cliente",
+      "ESCANEO_QR": "Lectura de QR en campo sin retorno aún",
+      "RETORNO_OK": "Retorno exitoso y validado",
+      "RETORNO_CONTAMINADO": "Retornado pero con contaminación > umbral",
+      "RECHAZADO_PESO": "Desviación de peso > ±15%",
+      "EN_TRANSITO": "En camión / ruta hacia valorización",
+      "VALORIZADO": "Entregado a gestor autorizado MMA",
+      "REPORTADO_RETC": "Incluido en reporte anual RETC"
+    }
+  },
+
+  "ciclo_rep": {
+    "descripcion": "Período anual de cumplimiento de metas REP por empresa",
+    "ejemplo": {
+      "id": 41,
+      "empresa_id": 3,
+      "razon_social": "Distrib. Andes del Sur",
+      "rut": "76.543.210-9",
+      "anio": 2026,
+      "fase": 4,
+      "meta_retorno_pct": 40.0,
+      "envases_total": 68412,
+      "envases_retorno": 33055,
+      "tasa_real_pct": 48.3,
+      "en_meta": true,
+      "estado": "ACTIVO",
+      "reporte_retc": {
+        "formato": "RETC-JSON-v2",
+        "generado_en": "2026-06-15T00:00:00-04:00",
+        "materiales": [
+          { "tipo": "PET",     "kg_total": 22140, "kg_retorno": 12480, "pct": 56.4 },
+          { "tipo": "VIDRIO",  "kg_total": 18320, "kg_retorno": 10100, "pct": 55.1 },
+          { "tipo": "CARTON",  "kg_total": 9810,  "kg_retorno": 4210,  "pct": 42.9 },
+          { "tipo": "METAL",   "kg_total": 4210,  "kg_retorno": 1840,  "pct": 43.7 }
+        ]
+      }
+    }
+  },
+
+  "certificado": {
+    "descripcion": "Documento de trazabilidad exportable ante RETC / SMA / auditoría ESG",
+    "ejemplo": {
+      "id": 1204,
+      "ciclo_id": 41,
+      "tipo": "CUMPLIMIENTO_REP",
+      "folio": "RC-2026-0041-CL",
+      "hash_sha256": "a3f4c2e1b9d087f6a41d99ef2c81b3a702d48cfe19a77364b5082c1f39d6e5a8",
+      "emitido_en": "2026-06-15T08:00:00-04:00",
+      "vigente_hasta": "2027-03-31",
+      "datos": {
+        "empresa": "Distrib. Andes del Sur",
+        "rut": "76.543.210-9",
+        "anio": 2026,
+        "fase_rep": 4,
+        "meta_pct": 40.0,
+        "logrado_pct": 48.3,
+        "estado": "EN_META",
+        "firmado_por": "RetornaCírculo SPA",
+        "qr_verificacion": "https://rc.cl/cert/RC-2026-0041-CL"
+      }
+    }
+  },
+
+  "api_endpoints": {
+    "base_url": "https://api.retornacirculo.cl/v1",
+    "autenticacion": "Bearer JWT (rotación 24h)",
+    "endpoints": [
+      { "metodo": "GET",  "ruta": "/envases",                 "desc": "Lista paginada con filtros (material, estado, empresa)" },
+      { "metodo": "POST", "ruta": "/envases",                 "desc": "Alta de nuevo envase + generación QR" },
+      { "metodo": "GET",  "ruta": "/envases/{qr_code}",       "desc": "Historial completo de eventos de un envase" },
+      { "metodo": "POST", "ruta": "/eventos",                 "desc": "Registrar nuevo evento (scan, retorno, rechazo)" },
+      { "metodo": "GET",  "ruta": "/empresas/{id}/dashboard", "desc": "KPIs en tiempo real para consola SaaS" },
+      { "metodo": "GET",  "ruta": "/empresas/{id}/ciclo",     "desc": "Estado del ciclo REP actual" },
+      { "metodo": "POST", "ruta": "/certificados/generar",    "desc": "Emitir certificado de retorno/cumplimiento" },
+      { "metodo": "GET",  "ruta": "/retc/reporte/{anio}",     "desc": "Payload exportable formato RETC-JSON-v2" },
+      { "metodo": "GET",  "ruta": "/puntos",                  "desc": "Puntos de retorno activos + geolocalización" }
+    ]
+  },
+
+  "webhook_payload": {
+    "descripcion": "Payload enviado a sistemas ERP del cliente en cada evento",
+    "ejemplo": {
+      "event":      "retorno.ok",
+      "timestamp":  "2026-06-14T16:45:22-04:00",
+      "empresa_id": 3,
+      "envase":     { "qr_code": "QR-ENV-CL-00084217", "material": "PET", "peso_kg": 1.19 },
+      "punto":      { "id": 12, "nombre": "RVM Centro Valparaíso", "lat": -33.0472, "lng": -71.6127 },
+      "firma_hmac": "sha256=b7f1a..."
+    }
+  }
+}
