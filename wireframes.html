@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RetornaCírculo · Wireframes Imprimibles</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --mid: #555;
+    --lite: #bbb;
+    --bg-wf: #f5f5f5;
+    --accent: #0066cc;
+    --border-w: 1.5px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: white;
+    color: var(--ink);
+    font-size: 13px;
+  }
+
+  /* ── COVER (screen only) ── */
+  .cover {
+    background: var(--ink);
+    color: white;
+    padding: 40px;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 160px;
+    margin-bottom: 0;
+  }
+  .cover h1 { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; color: #00d4ff; margin-bottom: 6px; }
+  .cover p { color: #888; font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; }
+  .print-hint {
+    background: #f0f4ff;
+    border-left: 4px solid var(--accent);
+    padding: 10px 16px;
+    font-size: 0.82rem;
+    color: #333;
+    margin: 0;
+  }
+
+  /* ── PAGE (each wireframe is a print page) ── */
+  .wf-page {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 40px;
+    border-bottom: 3px dashed #ddd;
+    page-break-after: always;
+    position: relative;
+  }
+  .wf-page:last-child { border-bottom: none; }
+
+  .wf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: var(--border-w) solid var(--ink);
+  }
+  .wf-header .screen-id {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--mid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .wf-header h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .wf-header .meta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.64rem;
+    color: var(--lite);
+    text-align: right;
+  }
+
+  /* ── WIREFRAME ELEMENTS ── */
+  .wf {
+    border: var(--border-w) solid var(--ink);
+    position: relative;
+    background: white;
+  }
+
+  /* Topbar */
+  .wf-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--ink);
+    color: white;
+    padding: 6px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.66rem;
+  }
+  .wf-topbar span { color: #888; }
+  .wf-topbar .live { color: #39ff84; }
+
+  /* Sidebar */
+  .wf-layout { display: flex; }
+  .wf-sidebar {
+    width: 140px; min-width: 140px;
+    border-right: var(--border-w) solid var(--ink);
+    padding: 10px 0;
+  }
+  .wf-sidebar .nav-group {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--lite);
+    letter-spacing: 0.1em;
+    padding: 6px 12px 2px;
+    text-transform: uppercase;
+  }
+  .wf-sidebar .nav-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 12px;
+    font-size: 0.72rem;
+    color: var(--mid);
+    border-left: 2px solid transparent;
+  }
+  .wf-sidebar .nav-item.active {
+    border-left-color: var(--accent);
+    color: var(--accent);
+    background: #f0f4ff;
+    font-weight: 700;
+  }
+  .wf-sidebar .nav-icon {
+    width: 14px; height: 14px;
+    border: 1px solid currentColor;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.5rem;
+  }
+
+  /* Main content area */
+  .wf-main { flex: 1; padding: 14px; }
+
+  /* KPI row */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  .kpi-box {
+    border: var(--border-w) solid var(--ink);
+    padding: 8px;
+  }
+  .kpi-box .kpi-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.56rem;
+    color: var(--mid);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 3px;
+    margin-bottom: 4px;
+  }
+  .kpi-box .kpi-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+  }
+  .kpi-box .kpi-delta {
+    font-size: 0.6rem;
+    color: var(--mid);
+    margin-top: 2px;
+  }
+  .kpi-box.accent { border-left: 3px solid var(--accent); }
+  .kpi-box.green  { border-left: 3px solid #006633; }
+  .kpi-box.amber  { border-left: 3px solid #996600; }
+  .kpi-box.red    { border-left: 3px solid #cc0033; }
+
+  /* Chart placeholder */
+  .chart-ph {
+    border: var(--border-w) dashed var(--lite);
+    background: var(--bg-wf);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: var(--mid);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    text-align: center;
+    position: relative;
+  }
+  .chart-ph::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px dashed #ccc;
+  }
+  .chart-ph .ph-label {
+    position: relative;
+    background: var(--bg-wf);
+    padding: 0 6px;
+  }
+
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .data-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  /* Table placeholder */
+  .table-ph { border: var(--border-w) solid #ddd; }
+  .table-ph .t-header {
+    background: #eee;
+    display: grid;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--mid);
+    padding: 4px 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-bottom: 1px solid #ccc;
+  }
+  .table-ph .t-row {
+    display: grid;
+    padding: 4px 8px;
+    border-bottom: 1px dashed #e0e0e0;
+    font-size: 0.7rem;
+    color: var(--mid);
+  }
+  .table-ph .t-row:last-child { border-bottom: none; }
+  .t-cols-5 { grid-template-columns: 2fr 1fr 1fr 1fr 1fr; }
+  .t-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .t-cols-3 { grid-template-columns: 2fr 1fr 1fr; }
+  .status-ok   { color: #006633; font-weight: 700; }
+  .status-warn { color: #996600; font-weight: 700; }
+  .status-err  { color: #cc0033; font-weight: 700; }
+
+  /* Event stream */
+  .event-ph { font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; }
+  .event-ph .ev-row {
+    display: grid; grid-template-columns: 56px 1fr;
+    gap: 6px; padding: 3px 0;
+    border-bottom: 1px dashed #e0e0e0;
+    color: var(--mid);
+  }
+  .ev-row .ev-t { color: #006633; }
+  .ev-row .ev-err { color: #cc0033; }
+  .ev-row .ev-warn { color: #996600; }
+
+  /* Form elements */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .form-field { border: var(--border-w) solid var(--ink); padding: 0; }
+  .form-label {
+    background: #eee;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--mid);
+    padding: 3px 8px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #ddd;
+    letter-spacing: 0.06em;
+  }
+  .form-input {
+    padding: 6px 8px;
+    font-size: 0.72rem;
+    color: #aaa;
+    font-family: 'Share Tech Mono', monospace;
+  }
+  .form-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-wf {
+    padding: 6px 16px;
+    border: var(--border-w) solid var(--ink);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .btn-primary { background: var(--ink); color: white; }
+
+  /* QR area */
+  .qr-box {
+    border: var(--border-w) solid var(--ink);
+    width: 80px; height: 80px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.56rem;
+    text-align: center;
+    color: var(--mid);
+    background: repeating-linear-gradient(
+      45deg, #f5f5f5, #f5f5f5 2px, white 2px, white 6px
+    );
+  }
+
+  /* Gauge circle */
+  .gauge-ph {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: var(--border-w) dashed var(--mid);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+  .gauge-ph small {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.44rem;
+    color: var(--mid);
+  }
+
+  /* Section with border annotation */
+  .annotation {
+    position: absolute;
+    right: -130px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    width: 120px;
+    line-height: 1.3;
+  }
+  .annotation::before {
+    content: '';
+    position: absolute;
+    left: -20px; top: 50%;
+    width: 16px; height: 1px;
+    background: var(--accent);
+  }
+
+  /* Info boxes */
+  .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+  .info-box {
+    border: var(--border-w) solid var(--ink);
+    padding: 10px;
+  }
+  .info-box .ib-head {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--mid);
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .info-box p { font-size: 0.72rem; color: #444; line-height: 1.4; }
+
+  /* Compliance bars */
+  .comp-row {
+    display: grid; grid-template-columns: 80px 1fr 40px;
+    gap: 8px; align-items: center; padding: 4px 0;
+    border-bottom: 1px dashed #ddd;
+  }
+  .comp-row .c-label { font-size: 0.7rem; color: var(--mid); }
+  .comp-bar { height: 12px; background: #eee; position: relative; }
+  .comp-fill { height: 100%; background: var(--ink); }
+  .comp-fill.over { background: #006633; }
+  .comp-fill.under { background: #cc0033; }
+  .comp-val { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; text-align: right; }
+
+  /* Trace timeline */
+  .trace-timeline { padding-left: 20px; position: relative; }
+  .trace-timeline::before {
+    content: ''; position: absolute;
+    left: 8px; top: 4px; bottom: 4px;
+    width: 1px; background: var(--ink);
+  }
+  .trace-step {
+    position: relative; padding: 3px 0 8px 16px;
+    font-size: 0.7rem; color: var(--mid);
+  }
+  .trace-step::before {
+    content: '';
+    position: absolute; left: -14px; top: 6px;
+    width: 8px; height: 8px;
+    background: white;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+  }
+  .trace-step .ts-time {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem; color: var(--lite);
+  }
+
+  /* Note footer */
+  .wf-footer {
+    display: flex; justify-content: space-between;
+    padding-top: 8px;
+    margin-top: 12px;
+    border-top: 1px solid #ddd;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--lite);
+  }
+
+  /* Print rules */
+  @media print {
+    .cover { background: white !important; color: black !important; border-bottom: 2px solid black; }
+    .cover h1 { color: black; font-size: 1.2rem; }
+    .cover p { color: #555; }
+    .print-hint { display: none; }
+    .wf-page { padding: 20px 28px; border-bottom: 2px solid #eee; }
+    body { font-size: 11px; }
+    @page { margin: 0.6cm; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <h1>♻ RETORNACÍRCULO</h1>
+  <p>WIREFRAMES IMPRIMIBLES · PROTOTIPO SaaS B2B · CREA INACAP 2026<br/>
+  4 pantallas · A4 / Letter · versión v1.0</p>
+</div>
+<div class="print-hint">
+  💡 <strong>Para imprimir:</strong> Ctrl+P (o Cmd+P) → Sin márgenes → Fondo gráfico activado → Escala: Ajustar a página
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     WF-01: DASHBOARD PRINCIPAL
+═══════════════════════════════════════════════ -->
+<div class="wf-page">
+  <div class="wf-header">
+    <div>
+      <div class="screen-id">WF-01 · DASHBOARD PRINCIPAL</div>
+      <h2>Consola de Operaciones · Vista Empresa</h2>
+    </div>
+    <div class="meta">RetornaCírculo v1.0<br/>Flujo: Empresa → Dashboard<br/>Estado: MOCKUP</div>
+  </div>
+
+  <div class="wf">
+    <!-- Topbar -->
+    <div class="wf-topbar">
+      <span>♻ <span style="color:white;font-weight:700;">RETORNACÍRCULO</span> · RC-OPS-v0.4</span>
+      <span class="live">● LIVE</span>
+      <span>2026-06-15 16:45:22 CLT · VAL-VAP · rc_demo</span>
+    </div>
+
+    <div class="wf-layout">
+      <!-- Sidebar -->
+      <div class="wf-sidebar">
+        <div class="nav-group">Navegación</div>
+        <div class="nav-item active"><span class="nav-icon">▦</span> Dashboard</div>
+        <div class="nav-item"><span class="nav-icon">⊞</span> Envases</div>
+        <div class="nav-item"><span class="nav-icon">↻</span> Eventos</div>
+        <div class="nav-item"><span class="nav-icon">⊕</span> Puntos</div>
+        <div class="nav-group">Análisis</div>
+        <div class="nav-item"><span class="nav-icon">◈</span> Cumplimiento</div>
+        <div class="nav-item"><span class="nav-icon">▲</span> Materiales</div>
+        <div class="nav-item"><span class="nav-icon">⬡</span> CO₂</div>
+        <div class="nav-group">Salidas</div>
+        <div class="nav-item"><span class="nav-icon">▣</span> Reportes RETC</div>
+        <div class="nav-item"><span class="nav-icon">◆</span> Certificados</div>
+        <div class="nav-item"><span class="nav-icon">⌘</span> API & Hooks</div>
+      </div>
+
+      <!-- Main -->
+      <div class="wf-main">
+        <!-- KPIs -->
+        <div class="kpi-row">
+          <div class="kpi-box accent">
+            <div class="kpi-label">ENVASES REGISTRADOS</div>
+            <div class="kpi-val">248.617</div>
+            <div class="kpi-delta">↑ 12,4% vs. mes anterior</div>
+          </div>
+          <div class="kpi-box green">
+            <div class="kpi-label">TASA DE RETORNO</div>
+            <div class="kpi-val">41,8%</div>
+            <div class="kpi-delta">↑ +1,8pp sobre meta 40%</div>
+          </div>
+          <div class="kpi-box green">
+            <div class="kpi-label">CUMPLIMIENTO REP</div>
+            <div class="kpi-val">38,2%</div>
+            <div class="kpi-delta">↑ meta Fase 3: 35%</div>
+          </div>
+          <div class="kpi-box amber">
+            <div class="kpi-label">CO₂ EVITADO (t)</div>
+            <div class="kpi-val">186,4</div>
+            <div class="kpi-delta">≈ 42 autos/año</div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-row">
+          <div class="chart-ph" style="height:120px;">
+            <div class="ph-label">📈 RETORNO SEMANAL POR MATERIAL<br/><span style="font-size:0.56rem;color:#bbb;">line chart · PET / Vidrio / Cartón / Metal / Plástico · últimos 90 días</span></div>
+          </div>
+          <div class="chart-ph" style="height:120px;">
+            <div class="ph-label">📊 CUMPLIMIENTO REP POR MATERIAL<br/><span style="font-size:0.56rem;color:#bbb;">bar chart horizontal · real 2026 vs. meta Fase 4</span></div>
+          </div>
+        </div>
+
+        <!-- Table + Events -->
+        <div class="data-row" style="margin-top:8px;">
+          <div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:4px;letter-spacing:.08em;">EMPRESAS PILOTO · RANKING RETORNO</div>
+            <div class="table-ph">
+              <div class="t-header t-cols-4"><span>EMPRESA</span><span>ENVASES</span><span>RETORNO</span><span>ESTADO</span></div>
+              <div class="t-row t-cols-4"><span>Distrib. Andes</span><span>68.412</span><span class="status-ok">48,3%</span><span class="status-ok">● META</span></div>
+              <div class="t-row t-cols-4"><span>Envases Pacífico</span><span>54.201</span><span class="status-ok">42,1%</span><span class="status-ok">● META</span></div>
+              <div class="t-row t-cols-4"><span>Cervecera Vpo.</span><span>41.880</span><span class="status-ok">40,7%</span><span class="status-ok">● META</span></div>
+              <div class="t-row t-cols-4"><span>Importadora Costa</span><span>47.022</span><span class="status-warn">37,5%</span><span class="status-warn">● ATENC.</span></div>
+              <div class="t-row t-cols-4"><span>Retail Marga M.</span><span>37.102</span><span class="status-err">29,4%</span><span class="status-err">● BAJO</span></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:4px;letter-spacing:.08em;">STREAM DE EVENTOS · TIEMPO REAL</div>
+            <div class="event-ph">
+              <div class="ev-row"><span class="ev-t">16:45:22</span><span><span class="status-ok">RETORNO_OK</span> · PET · 1,2kg · QR-ENV-CL-00084217 · Distrib. Andes</span></div>
+              <div class="ev-row"><span class="ev-t">16:44:35</span><span><span class="status-ok">RETORNO_OK</span> · Vidrio · 0,8kg · QR-ENV-CL-00084218 · Cervecera Vpo.</span></div>
+              <div class="ev-row"><span class="ev-t">16:43:18</span><span><span class="status-warn">CONTAMINADO</span> · Metal · 0,4kg · QR-ENV-CL-00084220</span></div>
+              <div class="ev-row"><span class="ev-t">16:42:01</span><span><span class="ev-err">RECHAZADO_PESO</span> · Plástico · 0,2kg · QR-ENV-CL-00084222</span></div>
+              <div class="ev-row"><span class="ev-t">16:41:44</span><span><span class="status-ok">RETORNO_OK</span> · Cartón · 0,3kg · QR-ENV-CL-00084219</span></div>
+              <div class="ev-row"><span class="ev-t">16:40:12</span><span><span class="status-ok">RETORNO_OK</span> · PET · 1,5kg · QR-ENV-CL-00084221</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-footer">
+    <span>RetornaCírculo · WF-01 · Dashboard Principal</span>
+    <span>Rol: Empresa productora / importadora</span>
+    <span>v1.0 · CREA INACAP 2026</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     WF-02: REGISTRO DE ENVASE / SCAN QR
+═══════════════════════════════════════════════ -->
+<div class="wf-page">
+  <div class="wf-header">
+    <div>
+      <div class="screen-id">WF-02 · REGISTRO DE ENVASE + ESCANEO QR</div>
+      <h2>Alta de Unidad + Trazabilidad de Retorno</h2>
+    </div>
+    <div class="meta">RetornaCírculo v1.0<br/>Flujo: Operador → Alta → Scan<br/>Estado: MOCKUP</div>
+  </div>
+
+  <div class="wf">
+    <div class="wf-topbar">
+      <span>♻ RETORNACÍRCULO · <span style="color:#888;">POST /envases · POST /eventos</span></span>
+      <span class="live">● API CONECTADA</span>
+      <span>Operador: Patio-VAL-001</span>
+    </div>
+    <div class="wf-main">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
+
+        <!-- Alta de envase -->
+        <div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:8px;letter-spacing:.08em;border-bottom:1px solid #ddd;padding-bottom:4px;">
+            MÓDULO A · ALTA DE NUEVO ENVASE
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <div class="form-label">RUT EMPRESA</div>
+              <div class="form-input">76.543.210-9</div>
+            </div>
+            <div class="form-field">
+              <div class="form-label">MATERIAL</div>
+              <div class="form-input">[ PET ▾ ]</div>
+            </div>
+          </div>
+          <div class="form-row form-row-3">
+            <div class="form-field">
+              <div class="form-label">PESO (kg)</div>
+              <div class="form-input">1,200</div>
+            </div>
+            <div class="form-field">
+              <div class="form-label">CAPACIDAD (L)</div>
+              <div class="form-input">1,5</div>
+            </div>
+            <div class="form-field">
+              <div class="form-label">LOTE</div>
+              <div class="form-input">LOT-2026-Q2</div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-wf btn-primary">+ REGISTRAR ENVASE</button>
+            <button class="btn-wf">CANCELAR</button>
+          </div>
+
+          <!-- QR generado -->
+          <div style="margin-top:14px;padding:10px;border:1.5px dashed #ccc;background:#f9f9f9;display:flex;align-items:center;gap:12px;">
+            <div class="qr-box">QR<br/>GEN.</div>
+            <div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#006633;font-weight:700;">✓ ENVASE REGISTRADO</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:0.68rem;margin-top:3px;">QR-ENV-CL-00084223</div>
+              <div style="font-size:0.66rem;color:#888;margin-top:2px;">Imprimir etiqueta → exportar PDF</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Escaneo y retorno -->
+        <div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:8px;letter-spacing:.08em;border-bottom:1px solid #ddd;padding-bottom:4px;">
+            MÓDULO B · PUNTO DE RETORNO · SCAN QR
+          </div>
+          <div style="border:1.5px solid var(--ink);padding:12px;background:#f9f9f9;text-align:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;left:0;right:0;top:40%;height:2px;background:linear-gradient(90deg,transparent,#006633,transparent);"></div>
+            <div class="qr-box" style="margin:0 auto 8px;width:100px;height:100px;">CÁMARA<br/>ACTIVA</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:#006633;letter-spacing:.1em;">ESCANEANDO...</div>
+          </div>
+
+          <!-- Resultado scan -->
+          <div style="margin-top:10px;border:1.5px solid #006633;padding:10px;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:#006633;margin-bottom:6px;letter-spacing:.06em;">✓ QR DETECTADO · QR-ENV-CL-00084217</div>
+            <div class="table-ph">
+              <div class="t-row t-cols-3"><span style="color:#888;">Material</span><span>PET</span><span style="color:#006633;">✓ Válido</span></div>
+              <div class="t-row t-cols-3"><span style="color:#888;">Peso esperado</span><span>1,200 kg</span><span></span></div>
+              <div class="t-row t-cols-3"><span style="color:#888;">Peso real</span><span>1,190 kg</span><span style="color:#006633;">✓ OK (−0,8%)</span></div>
+              <div class="t-row t-cols-3"><span style="color:#888;">Empresa</span><span colspan="2">Distrib. Andes</span></div>
+            </div>
+            <div class="form-actions" style="margin-top:8px;">
+              <button class="btn-wf btn-primary">✓ CONFIRMAR RETORNO</button>
+              <button class="btn-wf" style="border-color:#cc0033;color:#cc0033;">✗ RECHAZAR</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trazabilidad del envase -->
+      <div style="margin-top:14px;border-top:1px solid #ddd;padding-top:12px;">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:8px;letter-spacing:.08em;">
+          HISTORIAL DE TRAZABILIDAD · QR-ENV-CL-00084217
+        </div>
+        <div class="trace-timeline">
+          <div class="trace-step"><div class="ts-time">2026-04-10 08:30</div>REGISTRO · Alta en plataforma · Distrib. Andes del Sur · LOT-2026-Q2-0041</div>
+          <div class="trace-step"><div class="ts-time">2026-04-10 14:22</div>DESPACHO · Salida a distribución · Patio VAL-001 → Cliente Viña del Mar</div>
+          <div class="trace-step"><div class="ts-time">2026-04-11 09:15</div>RECEPCION · Recibido cliente · Supermercado Marga Marga #3</div>
+          <div class="trace-step"><div class="ts-time">2026-06-14 16:45</div>RETORNO_OK · Devuelto en RVM Centro Valparaíso · Peso: 1,190 kg ✓</div>
+          <div class="trace-step" style="color:#006633;font-weight:700;"><div class="ts-time" style="color:#006633;">pendiente</div>VALORIZADO → Gestor autorizado MMA · en proceso</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-footer">
+    <span>RetornaCírculo · WF-02 · Registro + Escaneo QR</span>
+    <span>Roles: Operador de patio / Punto de retorno</span>
+    <span>v1.0 · CREA INACAP 2026</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     WF-03: CUMPLIMIENTO REP + CERTIFICADOS
+═══════════════════════════════════════════════ -->
+<div class="wf-page">
+  <div class="wf-header">
+    <div>
+      <div class="screen-id">WF-03 · CUMPLIMIENTO REP + CERTIFICADOS</div>
+      <h2>Estado del Ciclo REP · Exportación RETC · Certificados</h2>
+    </div>
+    <div class="meta">RetornaCírculo v1.0<br/>Flujo: Empresa → Cumplimiento → Export<br/>Estado: MOCKUP</div>
+  </div>
+
+  <div class="wf">
+    <div class="wf-topbar">
+      <span>♻ RETORNACÍRCULO · /compliance · Distrib. Andes del Sur</span>
+      <span class="live">● EN META</span>
+      <span>Periodo: 2026 · Fase 4</span>
+    </div>
+    <div class="wf-main">
+
+      <div style="display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start;">
+
+        <div>
+          <!-- Cumplimiento bars -->
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:8px;letter-spacing:.08em;border-bottom:1px solid #ddd;padding-bottom:4px;">
+            CUMPLIMIENTO ACTUAL · 2026 FASE 4 (meta global: 40%)
+          </div>
+          <div class="comp-row"><span class="c-label">PET</span><div class="comp-bar"><div class="comp-fill over" style="width:52%;"></div></div><span class="comp-val status-ok">52,1%</span></div>
+          <div class="comp-row"><span class="c-label">Vidrio</span><div class="comp-bar"><div class="comp-fill over" style="width:62%;"></div></div><span class="comp-val status-ok">61,8%</span></div>
+          <div class="comp-row"><span class="c-label">Metal</span><div class="comp-bar"><div class="comp-fill under" style="width:48%;"></div></div><span class="comp-val status-warn">48,3%</span></div>
+          <div class="comp-row"><span class="c-label">Cartón</span><div class="comp-bar"><div class="comp-fill over" style="width:73%;"></div></div><span class="comp-val status-ok">73,4%</span></div>
+          <div class="comp-row"><span class="c-label">Plást. rígido</span><div class="comp-bar"><div class="comp-fill under" style="width:22%;"></div></div><span class="comp-val status-err">21,6%</span></div>
+          <div style="padding-top:6px;" class="comp-row"><span class="c-label" style="font-weight:700;">TOTAL</span><div class="comp-bar" style="border:1px solid #000;"><div class="comp-fill over" style="width:38%;background:#006633;"></div></div><span class="comp-val status-ok" style="font-weight:700;">38,2%</span></div>
+
+          <div style="margin-top:14px;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:6px;letter-spacing:.08em;border-bottom:1px solid #ddd;padding-bottom:4px;">
+              REPORTE RETC · 2026 · EXPORTABLE
+            </div>
+            <div class="table-ph">
+              <div class="t-header t-cols-4"><span>MATERIAL</span><span>KG TOTAL</span><span>KG RETORNO</span><span>%</span></div>
+              <div class="t-row t-cols-4"><span>PET</span><span>22.140</span><span>12.480</span><span class="status-ok">56,4%</span></div>
+              <div class="t-row t-cols-4"><span>Vidrio</span><span>18.320</span><span>10.100</span><span class="status-ok">55,1%</span></div>
+              <div class="t-row t-cols-4"><span>Cartón</span><span>9.810</span><span>4.210</span><span class="status-ok">42,9%</span></div>
+              <div class="t-row t-cols-4"><span>Metal</span><span>4.210</span><span>1.840</span><span class="status-ok">43,7%</span></div>
+            </div>
+            <div class="form-actions" style="margin-top:8px;">
+              <button class="btn-wf btn-primary">↓ EXPORTAR RETC-JSON-v2</button>
+              <button class="btn-wf">↓ EXPORTAR PDF</button>
+              <button class="btn-wf">↓ EXPORTAR CSV</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gauge + certificados -->
+        <div style="min-width:180px;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:8px;letter-spacing:.08em;border-bottom:1px solid #ddd;padding-bottom:4px;">
+            GAUGE GLOBAL
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:12px;">
+            <div class="gauge-ph" style="width:110px;height:110px;border:8px solid #006633;font-size:1.4rem;">
+              38,2%<small>CUMPL. REP</small>
+            </div>
+            <div style="font-size:0.66rem;color:#006633;margin-top:4px;font-family:'Share Tech Mono',monospace;">● EN META (35%)</div>
+          </div>
+
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:6px;letter-spacing:.08em;border-bottom:1px solid #ddd;padding-bottom:4px;">
+            CERTIFICADOS EMITIDOS
+          </div>
+          <div style="border:1.5px solid var(--ink);margin-bottom:6px;padding:8px;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:#006633;margin-bottom:3px;">RC-2026-0041-CL</div>
+            <div style="font-size:0.7rem;font-weight:700;">Cumplimiento REP</div>
+            <div style="font-size:0.62rem;color:#888;">Fase 4 · 2026 · Vigente</div>
+            <div style="margin-top:6px;display:flex;gap:4px;">
+              <button class="btn-wf" style="padding:3px 8px;font-size:0.6rem;">VER</button>
+              <button class="btn-wf" style="padding:3px 8px;font-size:0.6rem;">↓ PDF</button>
+            </div>
+          </div>
+          <div style="border:1.5px solid var(--ink);margin-bottom:6px;padding:8px;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:#444;margin-bottom:3px;">RC-2026-0028-RV</div>
+            <div style="font-size:0.7rem;font-weight:700;">Valorización</div>
+            <div style="font-size:0.62rem;color:#888;">PET+Vidrio · May 2026</div>
+            <div style="margin-top:6px;display:flex;gap:4px;">
+              <button class="btn-wf" style="padding:3px 8px;font-size:0.6rem;">VER</button>
+              <button class="btn-wf" style="padding:3px 8px;font-size:0.6rem;">↓ PDF</button>
+            </div>
+          </div>
+          <button class="btn-wf btn-primary" style="width:100%;margin-top:4px;">+ EMITIR CERTIFICADO</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-footer">
+    <span>RetornaCírculo · WF-03 · Cumplimiento REP + Certificados</span>
+    <span>Rol: Responsable de Sostenibilidad / Gerencia</span>
+    <span>v1.0 · CREA INACAP 2026</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     WF-04: DATA MODEL + API REFERENCE
+═══════════════════════════════════════════════ -->
+<div class="wf-page">
+  <div class="wf-header">
+    <div>
+      <div class="screen-id">WF-04 · MODELO DE DATOS + REFERENCIA API</div>
+      <h2>Esquema de entidades y contratos de integración</h2>
+    </div>
+    <div class="meta">RetornaCírculo v1.0<br/>Referencia técnica<br/>Estado: REVISADO</div>
+  </div>
+
+  <!-- Entidades -->
+  <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:8px;letter-spacing:.08em;border-bottom:1.5px solid var(--ink);padding-bottom:4px;">
+    MODELO ENTIDAD-RELACIÓN · SIMPLIFICADO
+  </div>
+
+  <div class="info-grid" style="margin-bottom:14px;">
+    <div class="info-box">
+      <div class="ib-head">EMPRESAS</div>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;line-height:1.6;">
+        id · rut (UNIQUE)<br/>razon_social<br/>tipo [PROD|IMP|GEST]<br/>region · retc_codigo<br/>sig_id · activa
+      </p>
+    </div>
+    <div class="info-box" style="border-color:var(--accent);">
+      <div class="ib-head" style="color:var(--accent);">ENVASES ← central</div>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;line-height:1.6;">
+        id · qr_code (UNIQUE)<br/>empresa_id → EMPRESAS<br/>material · peso_kg<br/>estado [campo/retorno/valor]<br/>lote · registrado_en
+      </p>
+    </div>
+    <div class="info-box">
+      <div class="ib-head">EVENTOS (log inmutable)</div>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;line-height:1.6;">
+        id (BIGSERIAL)<br/>envase_id → ENVASES<br/>punto_id → PUNTOS<br/>tipo_evento · peso_real<br/>lat · lng · metadata JSONB
+      </p>
+    </div>
+    <div class="info-box">
+      <div class="ib-head">PUNTOS_RETORNO</div>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;line-height:1.6;">
+        id · nombre<br/>tipo [RVM|ACOPIO|MOVIL]<br/>empresa_id (operador)<br/>lat · lng · region<br/>materiales[] · activo
+      </p>
+    </div>
+    <div class="info-box">
+      <div class="ib-head">CICLOS_REP</div>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;line-height:1.6;">
+        id · empresa_id<br/>anio · fase (1–5)<br/>meta_retorno_pct<br/>envases_total / retorno<br/>en_meta (calculado)<br/>reporte_retc JSONB
+      </p>
+    </div>
+    <div class="info-box">
+      <div class="ib-head">CERTIFICADOS</div>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;line-height:1.6;">
+        id · ciclo_id<br/>tipo [RETORNO|REP|CO2]<br/>folio (UNIQUE)<br/>hash_sha256<br/>datos JSONB<br/>vigente_hasta
+      </p>
+    </div>
+  </div>
+
+  <!-- API endpoints -->
+  <div style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:#888;margin-bottom:8px;letter-spacing:.08em;border-bottom:1.5px solid var(--ink);padding-bottom:4px;">
+    API ENDPOINTS · https://api.retornacirculo.cl/v1 · Bearer JWT
+  </div>
+  <div class="table-ph">
+    <div class="t-header" style="grid-template-columns:70px 220px 1fr;display:grid;">
+      <span>MÉTODO</span><span>RUTA</span><span>DESCRIPCIÓN</span>
+    </div>
+    <div class="t-row" style="grid-template-columns:70px 220px 1fr;display:grid;"><span style="color:#006633;font-weight:700;">GET</span><span>/envases</span><span>Lista paginada (filtros: material, estado, empresa)</span></div>
+    <div class="t-row" style="grid-template-columns:70px 220px 1fr;display:grid;"><span style="color:#cc6600;font-weight:700;">POST</span><span>/envases</span><span>Alta de nuevo envase + generación QR automático</span></div>
+    <div class="t-row" style="grid-template-columns:70px 220px 1fr;display:grid;"><span style="color:#006633;font-weight:700;">GET</span><span>/envases/{qr_code}</span><span>Historial completo de eventos de un envase</span></div>
+    <div class="t-row" style="grid-template-columns:70px 220px 1fr;display:grid;"><span style="color:#cc6600;font-weight:700;">POST</span><span>/eventos</span><span>Registrar nuevo evento (scan, retorno, rechazo)</span></div>
+    <div class="t-row" style="grid-template-columns:70px 220px 1fr;display:grid;"><span style="color:#006633;font-weight:700;">GET</span><span>/empresas/{id}/dashboard</span><span>KPIs en tiempo real para consola SaaS</span></div>
+    <div class="t-row" style="grid-template-columns:70px 220px 1fr;display:grid;"><span style="color:#cc6600;font-weight:700;">POST</span><span>/certificados/generar</span><span>Emitir certificado de retorno / cumplimiento REP</span></div>
+    <div class="t-row" style="grid-template-columns:70px 220px 1fr;display:grid;"><span style="color:#006633;font-weight:700;">GET</span><span>/retc/reporte/{anio}</span><span>Payload exportable formato RETC-JSON-v2 (MMA)</span></div>
+  </div>
+
+  <div class="wf-footer">
+    <span>RetornaCírculo · WF-04 · Modelo de Datos + API</span>
+    <span>Audiencia: developers / evaluadores técnicos</span>
+    <span>v1.0 · CREA INACAP 2026</span>
+  </div>
+</div>
+
+</body>
+</html>
