@@ -12,14 +12,6 @@
 
 **Vista previa embebida:**
 
-<iframe
-  src="https://retornacirculo.vercel.app/presentacion_retornacirculo.html"
-  width="100%"
-  height="600"
-  style="border:none;border-radius:8px;"
-  title="RetornaCírculo · Presentación de validación CREA INACAP"
-></iframe>
-
-> ⚠️ Si el iframe no carga en tu navegador, accede directamente en: [retornacirculo.vercel.app/presentacion_retornacirculo.html](https://retornacirculo.vercel.app/presentacion_retornacirculo.html)
+https://retornacirculo.vercel.app/presentacion%20retornacirculo.html
 
 ---
