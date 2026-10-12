@@ -1,0 +1,14 @@
+{
+  "name": "retornacirculo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sitio estático (sin build). package.json solo para herramientas de lint.",
+  "scripts": {
+    "lint": "html-validate \"dashboard.html\" \"index.html\" \"presentacion retornacirculo.html\" \"wireframes.html\" ",
+    "start": "npx --yes serve@14 -l 8000 ."
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "html-validate": "^9.7.1"
+  }
+}
